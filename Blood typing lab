@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forensic Science - Blood Typing Investigation</title>
+
+<style>
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#edf1f5;
+  color:#263548;
+}
+
+header {
+  background:#761c2c;
+  color:white;
+  text-align:center;
+  padding:25px 12px;
+}
+
+header h1 { margin:0 0 8px; }
+
+main {
+  max-width:1100px;
+  margin:auto;
+  padding:18px;
+}
+
+.panel {
+  background:white;
+  padding:20px;
+  margin-bottom:18px;
+  border-radius:12px;
+  box-shadow:0 2px 8px #0001;
+}
+
+h2 { color:#761c2c; }
+
+.instructions {
+  background:#fff5e5;
+  padding:16px;
+  border-left:5px solid #d9a03c;
+  line-height:1.7;
+}
+
+.equipment {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+
+.beaker {
+  width:125px;
+  min-height:130px;
+  border:2px solid #aab5c3;
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+  background:#f8fafc;
+  cursor:pointer;
+  user-select:none;
+}
+
+.beaker:hover, .beaker.selected {
+  border:3px solid #761c2c;
+  background:#fff2f3;
+}
+
+.liquid {
+  width:42px;
+  height:36px;
+  border:2px solid #8395a8;
+  border-radius:5px 5px 12px 12px;
+  margin:7px auto;
+}
+
+.water { background:#bce8fa; }
+.red { background:#bd3445; }
+.yellow { background:#e9c95b; }
+.blue { background:#547fc2; }
+.purple { background:#9a72bd; }
+
+#pipette {
+  width:55px;
+  height:115px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  cursor:grab;
+  margin:auto;
+}
+
+.bulb {
+  width:32px;
+  height:30px;
+  background:#a8b5c4;
+  border:2px solid #526273;
+  border-radius:50%;
+}
+
+.tube {
+  width:13px;
+  height:78px;
+  border:2px solid #526273;
+  background:white;
+  position:relative;
+}
+
+#pipetteLiquid {
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:0;
+}
+
+.status {
+  background:#edf2f7;
+  border-radius:8px;
+  padding:14px;
+  margin-top:15px;
+  font-weight:bold;
+  line-height:1.5;
+}
+
+.progress {
+  background:#e1e6ec;
+  height:14px;
+  border-radius:10px;
+  overflow:hidden;
+  margin:12px 0;
+}
+
+#progressBar {
+  background:#41946a;
+  height:100%;
+  width:0;
+  transition:width .3s;
+}
+
+.tray {
+  background:#e9eef3;
+  border:3px solid #9aa8b7;
+  border-radius:14px;
+  padding:18px;
+}
+
+.sampleArea {
+  border:2px dashed #a94a58;
+  background:#fff7f7;
+  padding:16px;
+  text-align:center;
+  border-radius:10px;
+  margin:15px 0;
+  cursor:pointer;
+  min-height:65px;
+}
+
+.wells {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.wellBox { text-align:center; }
+
+.well {
+  height:115px;
+  max-width:160px;
+  margin:10px auto;
+  border:3px solid #a5b0bc;
+  border-radius:50%;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:25px;
+}
+
+.well:hover { border-color:#761c2c; }
+
+.clumping {
+  color:#8b182a;
+  font-weight:bold;
+  font-size:27px;
+  line-height:1.2;
+}
+
+.noClumping {
+  color:#8495a5;
+  font-size:30px;
+}
+
+button {
+  background:#761c2c;
+  color:white;
+  border:0;
+  padding:12px 20px;
+  border-radius:7px;
+  cursor:pointer;
+  margin:5px;
+  font-size:15px;
+}
+
+button:hover { background:#982d40; }
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+  font-size:14px;
+}
+
+th,td {
+  padding:11px 7px;
+  border:1px solid #d5dce4;
+  text-align:center;
+}
+
+th {
+  background:#761c2c;
+  color:white;
+}
+
+tr:nth-child(even) { background:#f4f6f9; }
+
+.hidden { display:none; }
+
+.success {
+  background:#e1f3e7;
+  border-left:5px solid #41946a;
+  padding:15px;
+  line-height:1.7;
+}
+
+footer {
+  text-align:center;
+  padding:20px;
+  color:#667384;
+}
+
+@media(max-width:600px) {
+  .wells { grid-template-columns:1fr; }
+  table { font-size:11px; }
+  th,td { padding:7px 3px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🧪 Blood Typing: Crime Scene Investigation</h1>
+  <p>Forensic Science Laboratory Simulation</p>
+</header>
+
+<main>
+
+<section class="panel">
+  <h2>Case Background</h2>
+
+  <p>
+    A blood sample was recovered from a crime scene.
+    Investigators have collected blood samples from the victim
+    and ten possible suspects.
+  </p>
+
+  <p>
+    Your assignment is to determine the blood type of each sample
+    and identify the suspect whose blood type matches the crime scene.
+  </p>
+
+  <div class="instructions">
+    <strong>Laboratory Procedures</strong>
+    <ol>
+      <li>Clean the pipette using water and the waste beaker.</li>
+      <li>Collect one blood sample and place it in the sample area.</li>
+      <li>Clean the pipette using water and the waste beaker.</li>
+      <li>Collect one drop of A serum and place it in the A well.</li>
+      <li>Clean the pipette.</li>
+      <li>Collect one drop of B serum and place it in the B well.</li>
+      <li>Clean the pipette.</li>
+      <li>Collect one drop of Rh serum and place it in the Rh well.</li>
+      <li>Clean the pipette after the final serum.</li>
+      <li>Observe the results and continue to the next sample.</li>
+    </ol>
+    <strong>Important:</strong> Agglutination (clumping) indicates
+    that the corresponding antigen is present.
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Laboratory Equipment</h2>
+
+  <p>First click the pipette. Then click a container to collect its contents. Finally, click the appropriate destination.</p>
+
+  <div class="equipment">
+
+    <div class="beaker" id="water"
+      onclick="collect('water')"
+      ondragover="event.preventDefault()"
+      ondrop="sourceDrop(event,'water')">
+      💧
+      <div class="liquid water"></div>
+      <strong>Water</strong>
+      <small>Cleaning solution</small>
+    </div>
+
+    <div class="beaker" id="waste"
+      onclick="dispense('waste')"
+      ondragover="event.preventDefault()"
+      ondrop="targetDrop(event,'waste')">
+      🗑️
+      <div class="liquid"></div>
+      <strong>Waste</strong>
+      <small>Empty pipette</small>
+    </div>
+
+    <div class="beaker" id="bloodSample"
+      onclick="collect('sample')"
+      ondragover="event.preventDefault()"
+      ondrop="sourceDrop(event,'sample')">
+      🩸
+      <div class="liquid red"></div>
+      <strong>Blood Sample</strong>
+      <small id="sourceSampleName">Victim</small>
+    </div>
+
+    <div class="beaker" id="serumA"
+      onclick="collect('A')"
+      ondragover="event.preventDefault()"
+      ondrop="sourceDrop(event,'A')">
+      <div class="liquid yellow"></div>
+      <strong>A Serum</strong>
+      <small>Anti-A</small>
+    </div>
+
+    <div class="beaker" id="serumB"
+      onclick="collect('B')"
+      ondragover="event.preventDefault()"
+      ondrop="sourceDrop(event,'B')">
+      <div class="liquid blue"></div>
+      <strong>B Serum</strong>
+      <small>Anti-B</small>
+    </div>
+
+    <div class="beaker" id="serumRh"
+      onclick="collect('Rh')"
+      ondragover="event.preventDefault()"
+      ondrop="sourceDrop(event,'Rh')">
+      <div class="liquid purple"></div>
+      <strong>Rh Serum</strong>
+      <small>Anti-Rh</small>
+    </div>
+
+    <div style="text-align:center;min-width:100px">
+      <div id="pipette"
+        draggable="true"
+        onclick="selectPipette()"
+        ondragstart="dragPipette(event)">
+        <div class="bulb"></div>
+        <div class="tube">
+          <div id="pipetteLiquid"></div>
+        </div>
+      </div>
+      <strong>PIPETTE</strong>
+      <p id="pipetteState">Clean and empty</p>
+    </div>
+
+  </div>
+
+  <div class="status" id="instruction">
+    Step 1: Select the pipette, collect water, and empty it into waste.
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Investigation Progress</h2>
+
+  <div id="sampleCounter">Sample 1 of 12</div>
+
+  <div class="progress">
+    <div id="progressBar"></div>
+  </div>
+
+  <h3 id="sampleName">Victim Blood Sample</h3>
+</section>
+
+<section class="panel">
+  <h2>Blood Typing Tray</h2>
+
+  <div class="tray">
+
+    <strong>Current Sample: <span id="trayName">Victim</span></strong>
+
+    <div class="sampleArea"
+      id="samplePad"
+      onclick="dispense('sample')"
+      ondragover="event.preventDefault()"
+      ondrop="targetDrop(event,'sample')">
+      <strong>Blood Sample Area</strong>
+      <p id="samplePadText">Place blood sample here</p>
+    </div>
+
+    <div class="wells">
+
+      <div class="wellBox">
+        <strong>ANTIGEN A</strong>
+        <div class="well" id="wellA"
+          onclick="dispense('A')"
+          ondragover="event.preventDefault()"
+          ondrop="targetDrop(event,'A')">
+          <small>A Well</small>
+        </div>
+        <small>Anti-A Serum</small>
+      </div>
+
+      <div class="wellBox">
+        <strong>ANTIGEN B</strong>
+        <div class="well" id="wellB"
+          onclick="dispense('B')"
+          ondragover="event.preventDefault()"
+          ondrop="targetDrop(event,'B')">
+          <small>B Well</small>
+        </div>
+        <small>Anti-B Serum</small>
+      </div>
+
+      <div class="wellBox">
+        <strong>RH FACTOR</strong>
+        <div class="well" id="wellRh"
+          onclick="dispense('Rh')"
+          ondragover="event.preventDefault()"
+          ondrop="targetDrop(event,'Rh')">
+          <small>Rh Well</small>
+        </div>
+        <small>Anti-Rh Serum</small>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="status" id="resultMessage">
+    Complete the testing procedure to observe the reactions.
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Blood Typing Data Table</h2>
+
+  <p>
+    Record and compare the results of all twelve blood samples.
+    Clumping indicates a positive reaction.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Sample</th>
+        <th>Anti-A</th>
+        <th>Anti-B</th>
+        <th>Anti-Rh</th>
+        <th>Blood Type</th>
+      </tr>
+    </thead>
+
+    <tbody id="resultsTable">
+      <tr id="emptyRow">
+        <td colspan="5">Awaiting laboratory results...</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="panel hidden" id="finalReport">
+  <h2>🔍 Investigation Complete!</h2>
+
+  <div class="success">
+    <h3>Laboratory Findings</h3>
+    <p id="finalText"></p>
+  </div>
+
+  <h3>Investigator's Conclusion</h3>
+
+  <p>
+    The matching blood type provides class evidence.
+    It does not independently establish an individual's identity
+    or prove involvement in a crime.
+  </p>
+
+  <button onclick="window.print()">Print Investigation Report</button>
+</section>
+
+<section class="panel">
+  <button onclick="restart()">Restart Investigation</button>
+</section>
+
+</main>
+
+<footer>
+  Educational Forensic Science Simulation | ABO and Rh Blood Typing
+</footer>
+
+<script>
+
+// ======================================
+// SAMPLE DATA
+// ======================================
+
+const samples = [
+  {name:"Victim",type:"A+"},
+  {name:"Crime Scene",type:"A+"},
+  {name:"Suspect 1",type:"O+"},
+  {name:"Suspect 2",type:"B-"},
+  {name:"Suspect 3",type:"AB+"},
+  {name:"Suspect 4",type:"O-"},
+  {name:"Suspect 5",type:"B+"},
+  {name:"Suspect 6",type:"AB-"},
+  {name:"Suspect 7",type:"A+"},
+  {name:"Suspect 8",type:"O+"},
+  {name:"Suspect 9",type:"A-"},
+  {name:"Suspect 10",type:"B+"}
+];
+
+// ======================================
+// TESTING SEQUENCE
+// ======================================
+
+const steps = [
+  {source:"water",target:"waste",message:"Clean pipette before collecting blood."},
+  {source:"sample",target:"sample",message:"Collect blood and place it in the sample area."},
+  {source:"water",target:"waste",message:"Clean pipette before using A serum."},
+  {source:"A",target:"A",message:"Add one drop of A serum to the A well."},
+  {source:"water",target:"waste",message:"Clean pipette before using B serum."},
+  {source:"B",target:"B",message:"Add one drop of B serum to the B well."},
+  {source:"water",target:"waste",message:"Clean pipette before using Rh serum."},
+  {source:"Rh",target:"Rh",message:"Add one drop of Rh serum to the Rh well."},
+  {source:"water",target:"waste",message:"Clean pipette after the final serum."}
+];
+
+// ======================================
+// SIMULATION STATE
+// ======================================
+
+let current = 0;
+let stepIndex = 0;
+let selected = false;
+let contents = "";
+let reactions = {};
+let completed = [];
+
+const colors = {
+  water:"#bce8fa",
+  sample:"#bd3445",
+  A:"#e9c95b",
+  B:"#547fc2",
+  Rh:"#9a72bd"
+};
+
+// ======================================
+// USER INTERACTION
+// ======================================
+
+function selectPipette() {
+
+  if(contents !== "") {
+    showMessage("The pipette must be emptied before selecting it.");
+    return;
+  }
+
+  selected = true;
+
+  document.getElementById("pipetteState").textContent =
+    "Pipette selected";
+
+  document.getElementById("pipette").style.outline =
+    "3px solid #e5a33b";
+}
+
+function collect(source) {
+
+  if(!selected) {
+    showMessage("Select the pipette first.");
+    return;
+  }
+
+  if(contents !== "") {
+    showMessage("Empty the pipette before collecting another substance.");
+    return;
+  }
+
+  const required = steps[stepIndex].source;
+
+  if(source !== required) {
+    showMessage("Incorrect substance. Required: " + required);
+    return;
+  }
+
+  contents = source;
+  selected = false;
+
+  document.getElementById("pipette").style.outline = "none";
+
+  const liquid = document.getElementById("pipetteLiquid");
+
+  liquid.style.height = "55%";
+  liquid.style.background = colors[source];
+
+  document.getElementById("pipetteState").textContent =
+    "Holding: " + source;
+
+  showMessage(
+    "Substance collected. Place it in: " +
+    steps[stepIndex].target
+  );
+
+  highlightTarget(steps[stepIndex].target);
+}
+
+function dispense(target) {
+
+  if(contents === "") {
+    showMessage("Select the pipette and collect the required substance first.");
+    return;
+  }
+
+  const step = steps[stepIndex];
+
+  if(target !== step.target) {
+    showMessage("Incorrect destination. Use: " + step.target);
+    return;
+  }
+
+  if(contents !== step.source) {
+    showMessage("Incorrect substance.");
+    return;
+  }
+
+  // EMPTY WATER INTO WASTE
+  if(target === "waste") {
+    emptyPipette();
+    advance();
+    return;
+  }
+
+  // ADD BLOOD SAMPLE
+  if(target === "sample") {
+
+    document.getElementById("samplePadText").textContent =
+      "✓ Blood sample successfully added.";
+
+    emptyPipette();
+    advance();
+    return;
+  }
+
+  // TEST SERUM REACTIONS
+  const bloodType = samples[current].type;
+
+  let positive = false;
+
+  if(target === "A") {
+    positive = bloodType.startsWith("A") ||
+               bloodType.startsWith("AB");
+  }
+
+  if(target === "B") {
+    positive = bloodType.startsWith("B") ||
+               bloodType.startsWith("AB");
+  }
+
+  if(target === "Rh") {
+    positive = bloodType.endsWith("+");
+  }
+
+  reactions[target] = positive;
+
+  const well = document.getElementById(
+    target === "Rh" ? "wellRh" : "well" + target
+  );
+
+  if(positive) {
+
+    well.innerHTML =
+      '<span class="clumping">● • ●<br>• ● •</span>';
+
+    well.style.background = "#f6d5d9";
+
+  } else {
+
+    well.innerHTML =
+      '<span class="noClumping">○</span>';
+
+    well.style.background = "#ffffff";
+  }
+
+  document.getElementById("resultMessage").textContent =
+    target + " Serum Result: " +
+    (positive ? "AGGLUTINATION OBSERVED" : "NO AGGLUTINATION");
+
+  emptyPipette();
+  advance();
+}
+
+function emptyPipette() {
+
+  contents = "";
+  selected = false;
+
+  document.getElementById("pipetteLiquid").style.height = "0";
+
+  document.getElementById("pipetteState").textContent =
+    "Clean and empty";
+
+  document.getElementById("pipette").style.outline = "none";
+
+  clearHighlights();
+}
+
+// ======================================
+// ADVANCE TESTING SEQUENCE
+// ======================================
+
+function advance() {
+
+  stepIndex++;
+
+  if(stepIndex >= steps.length) {
+    finishSample();
+    return;
+  }
+
+  const step = steps[stepIndex];
+
+  showMessage(
+    "Step " + (stepIndex + 1) + " of 9: " + step.message
+  );
+}
+
+// ======================================
+// DETERMINE BLOOD TYPE
+// ======================================
+
+function calculateBloodType() {
+
+  let abo = "O";
+
+  if(reactions.A && reactions.B) {
+    abo = "AB";
+  } else if(reactions.A) {
+    abo = "A";
+  } else if(reactions.B) {
+    abo = "B";
+  }
+
+  return abo + (reactions.Rh ? "+" : "-");
+}
+
+// ======================================
+// COMPLETE SAMPLE AND RECORD RESULTS
+// ======================================
+
+function finishSample() {
+
+  const result = {
+    name:samples[current].name,
+    type:calculateBloodType(),
+    A:reactions.A,
+    B:reactions.B,
+    Rh:reactions.Rh
+  };
+
+  // Save completed test
+  completed.push(result);
+
+  // Update the data table immediately
+  addTableRow(result);
+
+  // Update progress
+  current++;
+
+  document.getElementById("progressBar").style.width =
+    (completed.length / samples.length * 100) + "%";
+
+  // Check whether all 12 samples are finished
+  if(current >= samples.length) {
+    showFinalReport();
+    return;
+  }
+
+  // Prepare next sample
+  stepIndex = 0;
+  reactions = {};
+
+  resetTray();
+
+  document.getElementById("sampleCounter").textContent =
+    "Sample " + (current + 1) + " of 12";
+
+  document.getElementById("sampleName").textContent =
+    samples[current].name + " Blood Sample";
+
+  document.getElementById("trayName").textContent =
+    samples[current].name;
+
+  document.getElementById("sourceSampleName").textContent =
+    samples[current].name;
+
+  showMessage(
+    "Sample " + (current + 1) +
+    " is ready. Begin by cleaning the pipette."
+  );
+
+  document.getElementById("resultMessage").textContent =
+    samples[current - 1].name +
+    " test recorded successfully! Prepare the next sample.";
+}
+
+// ======================================
+// RESULTS TABLE
+// ======================================
+
+function addTableRow(result) {
+
+  const table = document.getElementById("resultsTable");
+
+  const empty = document.getElementById("emptyRow");
+
+  if(empty) {
+    empty.remove();
+  }
+
+  const row = document.createElement("tr");
+
+  const values = [
+    result.name,
+    result.A ? "Clumping (+)" : "None (-)",
+    result.B ? "Clumping (+)" : "None (-)",
+    result.Rh ? "Clumping (+)" : "None (-)",
+    result.type
+  ];
+
+  values.forEach(value => {
+
+    const cell = document.createElement("td");
+
+    cell.textContent = value;
+
+    row.appendChild(cell);
+
+  });
+
+  table.appendChild(row);
+}
+
+// ======================================
+// RESET TRAY FOR NEXT SAMPLE
+// ======================================
+
+function resetTray() {
+
+  document.getElementById("samplePadText").textContent =
+    "Place blood sample here";
+
+  ["A","B","Rh"].forEach(w => {
+
+    const well = document.getElementById(
+      w === "Rh" ? "wellRh" : "well" + w
+    );
+
+    well.innerHTML = "<small>" + w + " Well</small>";
+
+    well.style.background = "white";
+
+  });
+
+}
+
+// ======================================
+// FINAL REPORT
+// ======================================
+
+function showFinalReport() {
+
+  const crime = completed.find(
+    result => result.name === "Crime Scene"
+  );
+
+  const matches = completed.filter(
+    result =>
+      result.name.startsWith("Suspect") &&
+      result.type === crime.type
+  );
+
+  document.getElementById("finalReport").classList.remove("hidden");
+
+  document.getElementById("finalText").textContent =
+    "Crime scene blood type: " + crime.type +
+    ". Matching suspect: " +
+    matches.map(m => m.name).join(", ") +
+    ". All 12 blood samples have been tested and recorded.";
+
+  document.getElementById("sampleName").textContent =
+    "All Samples Tested";
+
+  document.getElementById("sampleCounter").textContent =
+    "12 of 12 samples completed";
+
+  document.getElementById("resultMessage").textContent =
+    "Investigation complete! All results have been recorded.";
+
+  showMessage("Investigation complete! Review the data table and final report.");
+}
+
+// ======================================
+// DRAG AND DROP SUPPORT
+// ======================================
+
+function dragPipette(event) {
+
+  if(contents !== "") {
+    event.preventDefault();
+    return;
+  }
+
+  selected = true;
+
+  event.dataTransfer.setData("text/plain","pipette");
+}
+
+function sourceDrop(event, source) {
+
+  event.preventDefault();
+
+  selected = true;
+
+  collect(source);
+}
+
+function targetDrop(event, target) {
+
+  event.preventDefault();
+
+  dispense(target);
+}
+
+// ======================================
+// VISUAL INSTRUCTIONS
+// ======================================
+
+function showMessage(message) {
+
+  document.getElementById("instruction").textContent = message;
+
+}
+
+function clearHighlights() {
+
+  document.querySelectorAll(".beaker").forEach(b => {
+    b.classList.remove("selected");
+  });
+
+}
+
+function highlightTarget(target) {
+
+  clearHighlights();
+
+  const id = target === "sample" ? "samplePad" :
+             target === "waste" ? "waste" :
+             target === "A" ? "wellA" :
+             target === "B" ? "wellB" :
+             target === "Rh" ? "wellRh" : "";
+
+  const element = document.getElementById(id);
+
+  if(element) {
+    element.style.outline = "3px solid #e5a33b";
+  }
+
+}
+
+// ======================================
+// RESTART
+// ======================================
+
+function restart() {
+
+  if(!confirm("Restart the entire investigation? All results will be erased.")) {
+    return;
+  }
+
+  current = 0;
+  stepIndex = 0;
+  selected = false;
+  contents = "";
+  reactions = {};
+  completed = [];
+
+  document.getElementById("resultsTable").innerHTML =
+    '<tr id="emptyRow"><td colspan="5">Awaiting laboratory results...</td></tr>';
+
+  document.getElementById("progressBar").style.width = "0%";
+
+  document.getElementById("sampleCounter").textContent =
+    "Sample 1 of 12";
+
+  document.getElementById("sampleName").textContent =
+    "Victim Blood Sample";
+
+  document.getElementById("trayName").textContent =
+    "Victim";
+
+  document.getElementById("sourceSampleName").textContent =
+    "Victim";
+
+  document.getElementById("pipetteLiquid").style.height = "0";
+
+  document.getElementById("pipetteState").textContent =
+    "Clean and empty";
+
+  document.getElementById("pipette").style.outline = "none";
+
+  document.getElementById("finalReport").classList.add("hidden");
+
+  document.getElementById("resultMessage").textContent =
+    "Complete the testing procedure to observe the reactions.";
+
+  resetTray();
+  clearHighlights();
+
+  showMessage(
+    "Step 1 of 9: Select the pipette, collect water, and empty it into waste."
+  );
+
+}
+
+// ======================================
+// INITIALIZE WEBSITE
+// ======================================
+
+showMessage(
+  "Step 1 of 9: Select the pipette, collect water, and empty it into waste."
+);
+
+</script>
+
+</body>
+</html>
